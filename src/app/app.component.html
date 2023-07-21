@@ -1,7 +1,8 @@
 <section class="todoapp">
   <header class="header">
     <h1>{{ title }}</h1>
-    <input class="new-todo" [attr.myAttribute]="attributeBinding" [placeholder]="placeholder" (keyup)="add($event)" autofocus />
+    <input class="new-todo" [attr.myAttribute]="attributeBinding" #todoInput (keyup.enter)="add(todoInput)"
+      [placeholder]="placeholder" autofocus />
   </header>
   <section class="main" style="display: block">
     <input id="toggle-all" class="toggle-all" type="checkbox" [checked]="toggleAllBtn" (click)="toggleAll()" />
@@ -81,6 +82,9 @@
     </li>
     <li>
       <a href="https://blog.talllkai.com/Angular/2022/08/12/NgForUserIndex">利用ngFor提供的index參數刪除陣列裡的指定物件</a>
+    </li>
+    <li>
+      <a href="https://blog.talllkai.com/Angular/2022/08/13/TemplateVariables">使用範本變數和按鍵事件過濾優雅的完成新增待辦事項功能</a>
     </li>
   </ol>
 </div>

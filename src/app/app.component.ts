@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Todo, ITodo } from './models/todo.model';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,7 @@ export class AppComponent {
   // classCompleted1 = '';
   // classCompleted2 = '';
 
-  todoDataList = [
+  todoDataList: Todo[] = [
     {
       Status: true,
       Context: '第一件事情',
@@ -54,7 +55,7 @@ export class AppComponent {
     // }
   }
 
-  clickCheck(item: any) {
+  clickCheck(item: Todo) {
     item.Status = !item.Status;
   }
 
@@ -87,15 +88,14 @@ export class AppComponent {
     this.todoDataList.splice(index, 1);
   }
 
-  add(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      const value = (event.target as HTMLInputElement).value;
-      this.todoDataList.push({
-        Status: false,
-        Context: value,
-      });
-      (event.target as HTMLInputElement).value = '';
-    }
+  add(input: HTMLInputElement) {
+    // const newTodoContext: Todo = {
+    //   Status: false,
+    //   Context: input.value,
+    // };
+    // this.todoDataList.push(newTodoContext);
+    this.todoDataList.push(new Todo(false, input.value));
+    input.value = '';
   }
 
   btnFun(event: MouseEvent) {
