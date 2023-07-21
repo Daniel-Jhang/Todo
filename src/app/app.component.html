@@ -1,7 +1,7 @@
 <section class="todoapp">
   <header class="header">
     <h1>{{ title }}</h1>
-    <input class="new-todo" [attr.myAttribute]="attributeBinding" [placeholder]="placeholder" autofocus />
+    <input class="new-todo" [attr.myAttribute]="attributeBinding" [placeholder]="placeholder" (keyup)="add($event)" autofocus />
   </header>
   <section class="main" style="display: block">
     <input id="toggle-all" class="toggle-all" type="checkbox" [checked]="toggleAllBtn" (click)="toggleAll()" />
@@ -21,10 +21,11 @@
       </li> -->
 
       <!-- 改用*ngFor寫<li>的內容 -->
-      <li *ngFor="let item of todoDataList" [class]="{ completed: item.Status, smallText: item.Status }">
+      <li *ngFor="let item of todoDataList; let i = index" [class]="{ completed: item.Status, smallText: item.Status }">
         <div class="view">
           <input class="toggle" type="checkbox" [checked]="item.Status" (click)="clickCheck(item)" />
-          <label>{{ item.Context }}</label><button class="destroy"></button>
+          <!-- 利用ngFor提供的index(i)參數刪除陣列裡的指定物件 -->
+          <label>{{ item.Context }}</label><button class="destroy" (click)="delete(i)"></button>
         </div>
       </li>
     </ul>
@@ -73,7 +74,13 @@
       <a href="https://blog.talllkai.com/Angular/2022/08/08/ClassBinding">class繫結-更好的class管理方式</a>
     </li>
     <li>
-      <a href="https://blog.talllkai.com/Angular/2022/08/10/StyleBinder"></a>style繫結-(較少用到)
+      <a href="https://blog.talllkai.com/Angular/2022/08/10/StyleBinder">style繫結-(較少用到)</a>
+    </li>
+    <li>
+      <a href="https://blog.talllkai.com/Angular/2022/08/12/NgFor">ngFor用法-依ts中陣列數量及內容依序顯示在HTML上</a>
+    </li>
+    <li>
+      <a href="https://blog.talllkai.com/Angular/2022/08/12/NgForUserIndex">利用ngFor提供的index參數刪除陣列裡的指定物件</a>
     </li>
   </ol>
 </div>

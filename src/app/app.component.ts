@@ -37,7 +37,7 @@ export class AppComponent {
 
   toggleAll() {
     this.toggleAllBtn = !this.toggleAllBtn;
-    this.todoDataList.forEach(data => {
+    this.todoDataList.forEach((data) => {
       data.Status = this.toggleAllBtn;
     });
 
@@ -81,6 +81,22 @@ export class AppComponent {
   //   //   this.classCompleted2 = '';
   //   // }
   // }
+
+  delete(index: number) {
+    // splice(index: 第幾個位置, deleteCount: 刪除幾個物件)
+    this.todoDataList.splice(index, 1);
+  }
+
+  add(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      const value = (event.target as HTMLInputElement).value;
+      this.todoDataList.push({
+        Status: false,
+        Context: value,
+      });
+      (event.target as HTMLInputElement).value = '';
+    }
+  }
 
   btnFun(event: MouseEvent) {
     alert('123');
