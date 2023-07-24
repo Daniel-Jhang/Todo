@@ -21,7 +21,7 @@ export class AppComponent {
   // classCompleted1 = '';
   // classCompleted2 = '';
 
-  todoDataList: Todo[] = [
+  todoDataList: Todo[] = ([
     {
       Status: true,
       Context: '第一件事情',
@@ -34,7 +34,8 @@ export class AppComponent {
       Status: false,
       Context: '第三件事情',
     },
-  ];
+    // map()是RxJS語法，有空可以研究一下
+  ]).map(data => new Todo(data.Status, data.Context));
 
   toggleAll() {
     this.toggleAllBtn = !this.toggleAllBtn;
@@ -56,7 +57,8 @@ export class AppComponent {
   }
 
   clickCheck(item: Todo) {
-    item.Status = !item.Status;
+    // item.Status = !item.Status;
+    item.toggle();
   }
 
   // 使用ngFor精簡程式碼
