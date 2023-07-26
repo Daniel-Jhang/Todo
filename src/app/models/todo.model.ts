@@ -1,6 +1,7 @@
 export interface ITodo {
   Status: boolean;
   Context: string;
+  Editing: boolean
 }
 
 export class Todo {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Todo, ITodo } from './models/todo.model';
+import { ITodo } from './models/todo.model';
 
 @Component({
   selector: 'app-root',
@@ -21,21 +21,41 @@ export class AppComponent {
   // classCompleted1 = '';
   // classCompleted2 = '';
 
-  todoDataList: Todo[] = ([
+  // class的寫法
+  // todoDataList: Todo[] = ([
+  //   {
+  //     Status: true,
+  //     Context: '第一件事情',
+  //   },
+  //   {
+  //     Status: false,
+  //     Context: '第二件事情',
+  //   },
+  //   {
+  //     Status: false,
+  //     Context: '第三件事情',
+  //   },
+  //   // map()是RxJS語法，有空可以研究一下
+  // ]).map(data => new Todo(data.Status, data.Context));
+
+  // Interface的寫法
+  todoDataList: ITodo[] = ([
     {
       Status: true,
       Context: '第一件事情',
+      Editing: false
     },
     {
       Status: false,
       Context: '第二件事情',
+      Editing: false
     },
     {
       Status: false,
       Context: '第三件事情',
+      Editing: false
     },
-    // map()是RxJS語法，有空可以研究一下
-  ]).map(data => new Todo(data.Status, data.Context));
+  ]);
 
   toggleAll() {
     this.toggleAllBtn = !this.toggleAllBtn;
@@ -56,9 +76,13 @@ export class AppComponent {
     // }
   }
 
-  clickCheck(item: Todo) {
-    // item.Status = !item.Status;
-    item.toggle();
+  clickCheck(item: ITodo) {
+    // class的寫法
+    // item.toggle();
+
+
+    // Interface的寫法
+    item.Status = !item.Status;
   }
 
   // 使用ngFor精簡程式碼
@@ -90,14 +114,30 @@ export class AppComponent {
     this.todoDataList.splice(index, 1);
   }
 
+  // class的寫法
+  // add(input: HTMLInputElement) {
+  //   this.todoDataList.push(new Todo(false, input.value));
+  //   input.value = '';
+  // }
+
+  // Interface的寫法
   add(input: HTMLInputElement) {
-    // const newTodoContext: Todo = {
-    //   Status: false,
-    //   Context: input.value,
-    // };
-    // this.todoDataList.push(newTodoContext);
-    this.todoDataList.push(new Todo(false, input.value));
+    const newTodoContext: ITodo = {
+      Status: false,
+      Context: input.value,
+      Editing: false
+    };
+    this.todoDataList.push(newTodoContext);
     input.value = '';
+  }
+
+  edit(item: ITodo) {
+    item.Editing = true;
+  }
+
+  update(item: ITodo, newValue: string) {
+    item.Context = newValue;
+    item.Editing = false;
   }
 
   btnFun(event: MouseEvent) {
