@@ -22,12 +22,12 @@
       </li> -->
 
       <!-- 改用*ngFor寫<li>的內容 -->
-      <li *ngFor="let item of todoDataList; let i = index"
+      <li *ngFor="let item of nowTodoList; let i = index"
         [class]="{ completed: item.Status,editing:item.Editing ,smallText: item.Status }">
         <div class="view">
           <input class="toggle" type="checkbox" [checked]="item.Status" (click)="clickCheck(item)">
           <!-- 利用ngFor提供的index(i)參數刪除陣列裡的指定物件 -->
-          <label (dblclick)="edit(item)">{{ item.Context }}</label><button class="destroy" (click)="delete(i)"></button>
+          <label (dblclick)="edit(item)">{{ item.Context }}</label><button class="destroy" (click)="delete(item)"></button>
         </div>
         <!-- 使用ngIf控制元素是否出現在Html上 -->
         <input *ngIf="item.Editing" #itemInput [value]="item.Context" (keyup.enter)="update(item, itemInput.value)"
@@ -36,19 +36,22 @@
     </ul>
   </section>
   <footer class="footer" style="display: block;">
-    <span class="todo-count"><strong>2</strong> items left</span>
+    <span class="todo-count"><strong>{{todoActive.length}}</strong> items left</span>
     <ul class="filters">
       <li>
-        <a href="#/" class="selected">All</a>
+        <a [class.selected]="nowTodoStatusType === TodoStatusType.All" (click)="setTodoStatusType(TodoStatusType.All)"
+          href="#/">All</a>
       </li>
       <li>
-        <a href="#/active" class="">Active</a>
+        <a [class.selected]="nowTodoStatusType === TodoStatusType.Active"
+          (click)="setTodoStatusType(TodoStatusType.Active)" href="#/active">Active</a>
       </li>
       <li>
-        <a href="#/completed" class="">Completed</a>
+        <a [class.selected]="nowTodoStatusType === TodoStatusType.Completed"
+          (click)="setTodoStatusType(TodoStatusType.Completed)" href="#/completed">Completed</a>
       </li>
     </ul>
-    <button class="clear-completed" style="display: block;">Clear completed</button>
+    <button class="clear-completed" *ngIf="todoCompleted.length" (click)="ClearCompleted()">Clear completed</button>
   </footer>
 </section>
 <br />
@@ -91,5 +94,6 @@
     <li><a href="https://blog.talllkai.com/Angular/2022/08/13/TemplateVariables">使用範本變數和按鍵事件過濾優雅的完成新增待辦事項功能</a></li>
     <li><a href="https://blog.talllkai.com/Angular/2022/08/14/InterfaceOrClass">使用Interface或Class-為變數定義型別</a></li>
     <li><a href="https://blog.talllkai.com/Angular/2022/08/16/NgIf">使用ngIf控制元素是否出現在Html上</a></li>
+    <li><a href="https://blog.talllkai.com/Angular/2022/08/20/enum"></a>使用列舉型別增加可讀性及可維護性</li>
   </ol>
 </div>

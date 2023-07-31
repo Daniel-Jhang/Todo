@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ITodo } from './models/todo.model';
+import { ITodo, TodoStatusType } from './models/todo.model';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +13,9 @@ export class AppComponent {
 
   // 事件繫結-元素click事件呼叫ts的函式
   toggleAllBtn = false;
+
+  nowTodoStatusType = TodoStatusType.All;
+  TodoStatusType = TodoStatusType;
 
   // 使用ngFor精簡程式碼
   // check1 = false;
@@ -83,6 +86,12 @@ export class AppComponent {
 
     // Interface的寫法
     item.Status = !item.Status;
+
+    if (this.todoCompleted.length === this.todoDataList.length) {
+      this.toggleAllBtn = true;
+    } else {
+      this.toggleAllBtn = false;
+    }
   }
 
   // 使用ngFor精簡程式碼
@@ -109,9 +118,9 @@ export class AppComponent {
   //   // }
   // }
 
-  delete(index: number) {
+  delete(todo: ITodo) {
     // splice(index: 第幾個位置, deleteCount: 刪除幾個物件)
-    this.todoDataList.splice(index, 1);
+    this.todoDataList = this.todoDataList.filter(data => data !== todo);
   }
 
   // class的寫法
@@ -138,6 +147,42 @@ export class AppComponent {
   update(item: ITodo, newValue: string) {
     item.Context = newValue;
     item.Editing = false;
+  }
+
+  setTodoStatusType(type: number) {
+    this.nowTodoStatusType = type;
+  }
+
+  get nowTodoList(): ITodo[] {
+    let list: ITodo[] = [];
+
+    switch (this.nowTodoStatusType) {
+      case TodoStatusType.Active:
+        list = this.todoActive;
+        break;
+      case TodoStatusType.Completed:
+        list = this.todoCompleted;
+        break;
+      default:
+        list = this.todoDataList
+        break;
+    }
+
+    return list;
+  }
+
+  // 取得已未完成的 todo list
+  get todoActive(): ITodo[] {
+    return this.todoDataList.filter(data => data.Status == false);
+  }
+
+  // 取得已完成的 todo list
+  get todoCompleted(): ITodo[] {
+    return this, this.todoDataList.filter(data => data.Status == true);
+  }
+
+  ClearCompleted() {
+    this.todoDataList = this.todoActive;
   }
 
   btnFun(event: MouseEvent) {
