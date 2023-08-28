@@ -8,18 +8,6 @@
     <input id="toggle-all" class="toggle-all" type="checkbox" [checked]="toggleAllBtn" (click)="toggleAll()" />
     <label for="toggle-all">Mark all as complete</label>
     <ul class="todo-list">
-      <!-- <li data-id="1659859088014" [class]="{completed : check1, smallText: check1}">
-        <div class="view">
-          <input class="toggle" type="checkbox" [checked]="check1" (click)="clickCheck1()" />
-          <label>111</label><button class="destroy"></button>
-        </div>
-      </li>
-      <li data-id="1659859089744" [class]="{completed : check2, smallText : check2}">
-        <div class="view">
-          <input class="toggle" type="checkbox" [checked]="check2" (click)="clickCheck2()" />
-          <label>222</label><button class="destroy"></button>
-        </div>
-      </li> -->
 
       <!-- 改用*ngFor寫<li>的內容 -->
       <li *ngFor="let item of nowTodoList; let i = index"
@@ -54,32 +42,6 @@
     <button class="clear-completed" *ngIf="todoCompleted.length" (click)="ClearCompleted()">Clear completed</button>
   </footer>
 </section>
-<br />
-<Table border="1">
-  <tr>
-    <td [colSpan]="2">01</td>
-    <td>02</td>
-    <td>03</td>
-    <td>04</td>
-  </tr>
-  <tr>
-    <td rowspan="2">05</td>
-    <td>06</td>
-    <td [attr.rowspan]="1 + 1">07</td>
-    <td>08</td>
-  </tr>
-  <tr>
-    <td>09</td>
-    <td>10</td>
-    <td>11</td>
-    <td>12</td>
-  </tr>
-</Table>
-<br />
-<button (mouseenter)="btnFun($event)">
-  <h3>傳入mouseenter事件參數$event(用console log檢視)</h3>
-</button>
-<div [style]="{ fontSize: '2em', color: 'red' }">Style語法示範</div>
 
 <div>
   <ol>
