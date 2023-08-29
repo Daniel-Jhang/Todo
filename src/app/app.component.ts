@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
 
   todoDataList: ITodo[] = [];
   ngOnInit(): void {
-    this.http.get<any>('https://localhost:7271/api/TodoList').subscribe(response => {
+    this.http.get<any>('/api/TodoList').subscribe(response => {
       if (response.isSuccess) {
         this.todoDataList = response.data.map((item: any) => {
           return {
