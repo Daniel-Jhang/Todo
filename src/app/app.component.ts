@@ -8,23 +8,23 @@ import { ITodo, TodoStatusType } from './models/todo.model';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   todoDataList: ITodo[] = [];
   ngOnInit(): void {
-    this.http.get<any>('/api/TodoList').subscribe(response => {
+    this.http.get<any>('/api/TodoList').subscribe((response) => {
       if (response.isSuccess) {
         this.todoDataList = response.data.map((item: any) => {
           return {
             Status: item.status,
             Context: item.context,
-            Editing: item.editing
+            Editing: item.editing,
           };
         });
       } else {
         console.error(response.errorMessage);
       }
-    })
+    });
   }
 
   title = 'ToDoList';
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
 
   delete(todo: ITodo) {
     // splice(index: 第幾個位置, deleteCount: 刪除幾個物件)
-    this.todoDataList = this.todoDataList.filter(data => data !== todo);
+    this.todoDataList = this.todoDataList.filter((data) => data !== todo);
   }
 
   // Interface的寫法
@@ -65,8 +65,9 @@ export class AppComponent implements OnInit {
     const newTodoContext: ITodo = {
       Status: false,
       Context: input.value,
-      Editing: false
+      Editing: false,
     };
+    this.http.post<any>('/api/TodoList', newTodoContext).subscribe();
     this.todoDataList.push(newTodoContext);
     input.value = '';
   }
@@ -95,21 +96,20 @@ export class AppComponent implements OnInit {
         list = this.todoCompleted;
         break;
       default:
-        list = this.todoDataList
+        list = this.todoDataList;
         break;
     }
-
     return list;
   }
 
   // 取得已未完成的 todo list
   get todoActive(): ITodo[] {
-    return this.todoDataList.filter(data => data.Status == false);
+    return this.todoDataList.filter((data) => data.Status == false);
   }
 
   // 取得已完成的 todo list
   get todoCompleted(): ITodo[] {
-    return this, this.todoDataList.filter(data => data.Status == true);
+    return this, this.todoDataList.filter((data) => data.Status == true);
   }
 
   ClearCompleted() {
