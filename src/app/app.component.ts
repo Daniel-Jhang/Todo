@@ -16,11 +16,13 @@ export class AppComponent implements OnInit {
       if (response.isSuccess) {
         this.todoDataList = response.data.map((item: any) => {
           return {
+            TodoId: item.todoId,
             Status: item.status,
             Context: item.context,
             Editing: item.editing,
           };
         });
+        console.log(this.todoDataList);
       } else {
         console.error(response.errorMessage);
       }
@@ -63,12 +65,25 @@ export class AppComponent implements OnInit {
   // Interface的寫法
   add(input: HTMLInputElement) {
     const newTodoContext: ITodo = {
+      TodoId: null,
       Status: false,
       Context: input.value,
       Editing: false,
     };
-    this.http.post<any>('/api/TodoList', newTodoContext).subscribe();
-    this.todoDataList.push(newTodoContext);
+    this.http
+      .post<any>('/api/TodoList', newTodoContext)
+      .subscribe((response) => {
+        if (response.isSuccess) {
+          this.todoDataList.push({
+            TodoId: response.data.todoId,
+            Status: response.data.status,
+            Context: response.data.context,
+            Editing: response.data.editing,
+          });
+          console.log(response.isSuccess);
+          console.log(this.todoDataList);
+        }
+      });
     input.value = '';
   }
 

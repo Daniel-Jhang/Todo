@@ -3,6 +3,7 @@
 // 如果只是單純的數據流(只是要承接資料而已)，可以簡單用Interface，但如果要實做某些方法則要使用Class
 
 export interface ITodo {
+  TodoId: null;
   Status: boolean;
   Context: string;
   Editing: boolean;
