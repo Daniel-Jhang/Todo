@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ITodo, TodoStatusType } from './models/todo.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import { ITodo, TodoStatusType } from './models/todo.model';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) {}
 
   todoDataList: ITodo[] = [];
   ngOnInit(): void {
@@ -80,6 +81,12 @@ export class AppComponent implements OnInit {
             Context: response.data.context,
             Editing: response.data.editing,
           });
+
+          // 顯示新增成功的 toast message
+          this.toastr.success('新增成功', 'Success', {
+            timeOut: 3000, // 可自訂顯示時間
+          });
+
           console.log(response.isSuccess);
           console.log(this.todoDataList);
         }
