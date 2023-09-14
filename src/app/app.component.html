@@ -45,8 +45,8 @@
           *ngIf="item.Editing"
           #itemInput
           [value]="item.Context"
-          (keyup.enter)="update(item, itemInput.value)"
-          (blur)="update(item, itemInput.value)"
+          (keyup.enter)="update(item)"
+          (blur)="update(item)"
           (mouseenter)="itemInput.focus()"
           class="edit"
         />

@@ -23,8 +23,16 @@ export class AppComponent implements OnInit {
             Editing: item.editing,
           };
         });
+        // 顯示查詢成功的 toast message
+        this.toastr.success('查詢成功', 'Success', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
         console.log(this.todoDataList);
       } else {
+        // 顯示查詢失敗的 toast message
+        this.toastr.error('查詢失敗', 'Error', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
         console.error(response.errorMessage);
       }
     });
@@ -81,14 +89,17 @@ export class AppComponent implements OnInit {
             Context: response.data.context,
             Editing: response.data.editing,
           });
-
           // 顯示新增成功的 toast message
           this.toastr.success('新增成功', 'Success', {
             timeOut: 3000, // 可自訂顯示時間
           });
-
           console.log(response.isSuccess);
           console.log(this.todoDataList);
+        }else{
+           // 顯示新增失敗的 toast message
+           this.toastr.error('新增失敗', 'Error', {
+            timeOut: 3000, // 可自訂顯示時間
+          });
         }
       });
     input.value = '';
@@ -98,9 +109,22 @@ export class AppComponent implements OnInit {
     item.Editing = true;
   }
 
-  update(item: ITodo, newValue: string) {
-    item.Context = newValue;
-    item.Editing = false;
+  update(item: ITodo) {
+    this.http.put('/api/TodoList', item).subscribe(
+      (response) => {
+        item.Editing = false;
+        // 顯示更新成功的 toast message
+        this.toastr.success('更新成功', 'Success', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      },
+      (error) => {
+        // 顯示更新失敗的 toast message
+        this.toastr.error('更新失敗', 'Error', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      }
+    );
   }
 
   setTodoStatusType(type: number) {
