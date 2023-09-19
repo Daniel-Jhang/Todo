@@ -3,19 +3,23 @@
 // 如果只是單純的數據流(只是要承接資料而已)，可以簡單用Interface，但如果要實做某些方法則要使用Class
 
 export interface ITodo {
-  TodoId: null;
+  TodoId: string;
   Status: boolean;
   Context: string;
   Editing: boolean;
 }
 
-export class Todo {
+export class TodoClass implements ITodo {
+  TodoId: string;
   Status: boolean;
   Context: string;
+  Editing: boolean;
 
-  constructor(_ststus: boolean = false, _context: string) {
-    this.Status = _ststus;
-    this.Context = _context;
+  constructor() {
+    this.TodoId = '';
+    this.Status = false;
+    this.Context = '';
+    this.Editing = false;
   }
 
   toggle() {

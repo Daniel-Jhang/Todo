@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   title = 'ToDoList';
   placeholder = 'what needs to be done today??';
   attributeBinding = 'attributeBindingTest';
-  toggleAllBtn = false;  // 事件繫結-元素click事件呼叫ts的函式
+  toggleAllBtn = false; // 事件繫結-元素click事件呼叫ts的函式
   nowTodoStatusType = TodoStatusType.All;
   TodoStatusType = TodoStatusType;
   todoDataList: ITodo[] = [];
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   add(input: HTMLInputElement) {
     const newTodoContext: ITodo = {
-      TodoId: null,
+      TodoId: '',
       Status: false,
       Context: input.value,
       Editing: false,
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
     input.value = '';
   }
 
-  getData(){
+  getData() {
     this.http.get<any>('/api/TodoList').subscribe((response) => {
       if (response.isSuccess) {
         this.todoDataList = response.data.map((item: any) => {
