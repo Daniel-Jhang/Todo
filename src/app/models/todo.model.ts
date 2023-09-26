@@ -9,7 +9,7 @@ export interface ITodo {
   Editing: boolean;
 }
 
-export class TodoClass implements ITodo {
+export class Todo implements ITodo {
   TodoId: string;
   Status: boolean;
   Context: string;

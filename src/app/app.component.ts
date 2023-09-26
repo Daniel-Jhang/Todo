@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ITodo, TodoStatusType } from './models/todo.model';
 import { ToastrService } from 'ngx-toastr';
@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
             TodoId: item.todoId,
             Status: item.status,
             Context: item.context,
-            Editing: item.editing,
+            //Editing: item.editing,
           };
         });
         // 顯示查詢成功的 toast message
@@ -74,6 +74,7 @@ export class AppComponent implements OnInit {
           timeOut: 3000, // 可自訂顯示時間
         });
         console.log(this.todoDataList);
+        this.checkToggleAllBtn();
       } else {
         // 顯示查詢失敗的 toast message
         this.toastr.error('查詢失敗', 'Error', {
@@ -103,7 +104,22 @@ export class AppComponent implements OnInit {
   }
 
   delete(todo: ITodo) {
-    // splice(index: 第幾個位置, deleteCount: 刪除幾個物件)
+    const params = new HttpParams().set('todoRecordId', todo.TodoId);
+    this.http.delete('/api/TodoList', { params: params }).subscribe(
+      (response) => {
+        // 顯示刪除成功的 toast message
+        this.toastr.success('刪除成功', 'Success', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      },
+      (error) => {
+        // 顯示刪除失敗的 toast message
+        this.toastr.error('刪除失敗', 'Error', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      }
+    );
+    // TODO: 改用後端return回來的data渲染
     this.todoDataList = this.todoDataList.filter((data) => data !== todo);
   }
 
@@ -112,12 +128,35 @@ export class AppComponent implements OnInit {
     this.todoDataList.forEach((data) => {
       data.Status = this.toggleAllBtn;
     });
+    const params = new HttpParams().set('status', this.toggleAllBtn);
+    // HttpClient的put()方法參數與其他不同，地2個參數為 body，須注意參數傳入的順序
+    this.http
+      .put('/api/TodoList/toggleAll', null, { params: params })
+      .subscribe();
   }
 
   clickCheck(item: ITodo) {
     // Interface的寫法
     item.Status = !item.Status;
+    this.http.put<any>('/api/TodoList', item).subscribe(
+      (response) => {
+        item.Editing = false;
+        // 顯示更新成功的 toast message
+        this.toastr.success('狀態更新成功', 'Success', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      },
+      (error) => {
+        // 顯示更新失敗的 toast message
+        this.toastr.error('狀態更新失敗', 'Error', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      }
+    );
+    this.checkToggleAllBtn();
+  }
 
+  checkToggleAllBtn() {
     if (this.todoCompleted.length === this.todoDataList.length) {
       this.toggleAllBtn = true;
     } else {
