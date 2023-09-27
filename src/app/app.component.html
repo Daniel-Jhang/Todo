@@ -42,7 +42,7 @@
           (click)="setTodoStatusType(TodoStatusType.Completed)" href="#/completed">Completed</a>
       </li>
     </ul>
-    <button class="clear-completed" *ngIf="todoCompleted.length" (click)="ClearCompleted()">
+    <button class="clear-completed" *ngIf="todoCompleted.length" (click)="clearCompleted()">
       Clear completed
     </button>
   </footer>

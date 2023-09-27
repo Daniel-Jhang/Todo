@@ -123,18 +123,6 @@ export class AppComponent implements OnInit {
     this.todoDataList = this.todoDataList.filter((data) => data !== todo);
   }
 
-  toggleAll() {
-    this.toggleAllBtn = !this.toggleAllBtn;
-    this.todoDataList.forEach((data) => {
-      data.Status = this.toggleAllBtn;
-    });
-    const params = new HttpParams().set('status', this.toggleAllBtn);
-    // HttpClient的put()方法參數與其他不同，地2個參數為 body，須注意參數傳入的順序
-    this.http
-      .put('/api/TodoList/toggleAll', null, { params: params })
-      .subscribe();
-  }
-
   clickCheck(item: ITodo) {
     // Interface的寫法
     item.Status = !item.Status;
@@ -156,6 +144,18 @@ export class AppComponent implements OnInit {
     this.checkToggleAllBtn();
   }
 
+  toggleAll() {
+    this.toggleAllBtn = !this.toggleAllBtn;
+    this.todoDataList.forEach((data) => {
+      data.Status = this.toggleAllBtn;
+    });
+    const params = new HttpParams().set('status', this.toggleAllBtn);
+    // HttpClient的put()方法參數與其他不同，地2個參數為 body，須注意參數傳入的順序
+    this.http
+      .put('/api/TodoList/toggleAll', null, { params: params })
+      .subscribe();
+  }
+
   checkToggleAllBtn() {
     if (this.todoCompleted.length === this.todoDataList.length) {
       this.toggleAllBtn = true;
@@ -164,16 +164,26 @@ export class AppComponent implements OnInit {
     }
   }
 
+  clearCompleted() {
+    const completedIds = this.todoDataList
+      .filter((data) => data.Status)
+      .map((data) => data.TodoId);
+
+    const httpOptions = {
+      body: completedIds,
+    };
+
+    this.http.delete('/api/TodoList/clearCompleted', httpOptions).subscribe();
+    // TODO: 改用後端return回來的data渲染
+    this.todoDataList = this.todoActive;
+  }
+
   edit(item: ITodo) {
     item.Editing = true;
   }
 
   setTodoStatusType(type: number) {
     this.nowTodoStatusType = type;
-  }
-
-  ClearCompleted() {
-    this.todoDataList = this.todoActive;
   }
 
   btnFun(event: MouseEvent) {
