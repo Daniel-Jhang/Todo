@@ -1,7 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ITodo, TodoStatusType } from './models/todo.model';
 import { ToastrService } from 'ngx-toastr';
+import { TodoApiService } from './services/todo-api.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AppComponent implements OnInit {
   // 建構式
-  constructor(private http: HttpClient, private toastr: ToastrService) {}
+  constructor(
+    private todoApiService: TodoApiService,
+    private toastr: ToastrService
+  ) {}
 
   // 宣告變數
   title = 'ToDoList';
@@ -25,6 +28,7 @@ export class AppComponent implements OnInit {
     this.getData();
   }
 
+  // 新增資料
   add(input: HTMLInputElement) {
     const newTodoContext: ITodo = {
       TodoId: '',
@@ -32,34 +36,33 @@ export class AppComponent implements OnInit {
       Context: input.value,
       Editing: false,
     };
-    this.http
-      .post<any>('/api/TodoList', newTodoContext)
-      .subscribe((response) => {
-        if (response.isSuccess) {
-          this.todoDataList.push({
-            TodoId: response.data.todoId,
-            Status: response.data.status,
-            Context: response.data.context,
-            Editing: response.data.editing,
-          });
-          // 顯示新增成功的 toast message
-          this.toastr.success('新增成功', 'Success', {
-            timeOut: 3000, // 可自訂顯示時間
-          });
-          console.log(response.isSuccess);
-          console.log(this.todoDataList);
-        } else {
-          // 顯示新增失敗的 toast message
-          this.toastr.error('新增失敗', 'Error', {
-            timeOut: 3000, // 可自訂顯示時間
-          });
-        }
-      });
+    this.todoApiService.createData(newTodoContext).subscribe((response) => {
+      if (response.isSuccess) {
+        this.todoDataList.push({
+          TodoId: response.data.todoId,
+          Status: response.data.status,
+          Context: response.data.context,
+          Editing: response.data.editing,
+        });
+        // 顯示新增成功的 toast message
+        this.toastr.success('新增成功', 'Success', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+        console.log(response.isSuccess);
+        console.log(this.todoDataList);
+      } else {
+        // 顯示新增失敗的 toast message
+        this.toastr.error('新增失敗', 'Error', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      }
+    });
     input.value = '';
   }
 
+  // 取得資料
   getData() {
-    this.http.get<any>('/api/TodoList').subscribe((response) => {
+    this.todoApiService.getData().subscribe((response) => {
       if (response.isSuccess) {
         this.todoDataList = response.data.map((item: any) => {
           return {
@@ -85,8 +88,9 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // 更新資料
   update(item: ITodo) {
-    this.http.put<any>('/api/TodoList', item).subscribe(
+    this.todoApiService.updateDate(item).subscribe(
       (response) => {
         item.Editing = false;
         // 顯示更新成功的 toast message
@@ -103,30 +107,11 @@ export class AppComponent implements OnInit {
     );
   }
 
-  delete(todo: ITodo) {
-    const params = new HttpParams().set('todoRecordId', todo.TodoId);
-    this.http.delete('/api/TodoList', { params: params }).subscribe(
-      (response) => {
-        // 顯示刪除成功的 toast message
-        this.toastr.success('刪除成功', 'Success', {
-          timeOut: 3000, // 可自訂顯示時間
-        });
-      },
-      (error) => {
-        // 顯示刪除失敗的 toast message
-        this.toastr.error('刪除失敗', 'Error', {
-          timeOut: 3000, // 可自訂顯示時間
-        });
-      }
-    );
-    // TODO: 改用後端return回來的data渲染
-    this.todoDataList = this.todoDataList.filter((data) => data !== todo);
-  }
-
+  // 更新資料狀態
   clickCheck(item: ITodo) {
     // Interface的寫法
     item.Status = !item.Status;
-    this.http.put<any>('/api/TodoList', item).subscribe(
+    this.todoApiService.updateDate(item).subscribe(
       (response) => {
         item.Editing = false;
         // 顯示更新成功的 toast message
@@ -144,16 +129,44 @@ export class AppComponent implements OnInit {
     this.checkToggleAllBtn();
   }
 
+  // 更新所有資料狀態(全部狀態統一)
   toggleAll() {
     this.toggleAllBtn = !this.toggleAllBtn;
     this.todoDataList.forEach((data) => {
       data.Status = this.toggleAllBtn;
     });
-    const params = new HttpParams().set('status', this.toggleAllBtn);
-    // HttpClient的put()方法參數與其他不同，地2個參數為 body，須注意參數傳入的順序
-    this.http
-      .put('/api/TodoList/toggleAll', null, { params: params })
-      .subscribe();
+    this.todoApiService.toggleAll(this.toggleAllBtn).subscribe();
+  }
+
+  // 刪除資料
+  delete(todo: ITodo) {
+    this.todoApiService.deleteData(todo).subscribe(
+      (response) => {
+        // 顯示刪除成功的 toast message
+        this.toastr.success('刪除成功', 'Success', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      },
+      (error) => {
+        // 顯示刪除失敗的 toast message
+        this.toastr.error('刪除失敗', 'Error', {
+          timeOut: 3000, // 可自訂顯示時間
+        });
+      }
+    );
+    // TODO: 改用後端return回來的data渲染
+    this.todoDataList = this.todoDataList.filter((data) => data !== todo);
+  }
+
+  // 刪除資料(刪除已完成事項)
+  clearCompleted() {
+    const completedIds = this.todoDataList
+      .filter((data) => data.Status)
+      .map((data) => data.TodoId);
+
+    this.todoApiService.clearCompleted(completedIds).subscribe();
+    // TODO: 改用後端return回來的data渲染
+    this.todoDataList = this.todoActive;
   }
 
   checkToggleAllBtn() {
@@ -162,20 +175,6 @@ export class AppComponent implements OnInit {
     } else {
       this.toggleAllBtn = false;
     }
-  }
-
-  clearCompleted() {
-    const completedIds = this.todoDataList
-      .filter((data) => data.Status)
-      .map((data) => data.TodoId);
-
-    const httpOptions = {
-      body: completedIds,
-    };
-
-    this.http.delete('/api/TodoList/clearCompleted', httpOptions).subscribe();
-    // TODO: 改用後端return回來的data渲染
-    this.todoDataList = this.todoActive;
   }
 
   edit(item: ITodo) {
