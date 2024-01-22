@@ -5,13 +5,15 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr'; // 引入 ngx-toastr
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LabComponent } from './lab/lab.component';// 需要加入動畫模組
+import { LabComponent } from './lab/lab.component';
+import { ToDoListComponent } from './to-do-list/to-do-list.component';// 需要加入動畫模組
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LabComponent,
+    ToDoListComponent,
   ],
   imports: [
     BrowserModule,
