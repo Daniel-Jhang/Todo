@@ -4,12 +4,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr'; // 引入 ngx-toastr
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // 需要加入動畫模組
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';// 需要加入動畫模組
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
