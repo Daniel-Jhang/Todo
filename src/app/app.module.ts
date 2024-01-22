@@ -4,9 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr'; // 引入 ngx-toastr
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LabComponent } from './lab/lab.component';
-import { ToDoListComponent } from './to-do-list/to-do-list.component';// 需要加入動畫模組
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // 需要加入動畫模組
+import { LabComponent } from './lab/lab.component'; // 加入 Lab Component
+import { ToDoListComponent } from './to-do-list/to-do-list.component'; // 加入 To-Do List Component
 
 
 @NgModule({
