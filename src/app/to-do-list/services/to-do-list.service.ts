@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { TodoStatusType, ITodo } from '../models/todo.model';
-import { TodoApiService } from '../request-services/todo-api.service';
+import { TodoStatusType, ITodo } from '../models/to-do-list.model';
+import { TodoApiService } from './to-do-list-request.service';
 import { Observable, map } from 'rxjs';
 
 @Injectable({

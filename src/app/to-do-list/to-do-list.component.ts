@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ITodo, TodoStatusType } from '../models/todo.model';
+import { ITodo, TodoStatusType } from './models/to-do-list.model';
 import { ToastrService } from 'ngx-toastr';
-import { TodoService } from '../services/todo.service';
+import { TodoService } from './services/to-do-list.service';
 
 @Component({
   selector: 'app-to-do-list',

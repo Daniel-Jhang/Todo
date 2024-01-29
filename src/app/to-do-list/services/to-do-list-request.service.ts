@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ITodo } from '../models/todo.model';
+import { ITodo } from '../models/to-do-list.model';
 import { IApiResultModel } from '../models/apiResultData.model';
 
 @Injectable({
