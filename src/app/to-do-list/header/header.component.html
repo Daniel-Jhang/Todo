@@ -1,0 +1,9 @@
+<h1>{{ title }}</h1>
+<input
+  class="new-todo"
+  [attr.myAttribute]="attributeBinding"
+  #todoInput
+  (keyup.enter)="add(todoInput)"
+  placeholder="what needs to be done today??"
+  autofocus
+/>

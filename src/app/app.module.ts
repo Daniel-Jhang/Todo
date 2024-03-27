@@ -12,7 +12,10 @@ import { HeroParentComponent } from './hero/hero-parent/hero-parent.component';
 import { HeroChildComponent } from './hero/hero-child/hero-child.component';
 import { VoterComponent } from './voter/voter.component';
 import { VoterChildComponent } from './voter/voter-child/voter-child.component';
-import { VoterParentComponent } from './voter/voter-parent/voter-parent.component'; // 加入 To-Do List Component
+import { VoterParentComponent } from './voter/voter-parent/voter-parent.component';
+import { HeaderComponent } from './to-do-list/header/header.component';
+import { SectionComponent } from './to-do-list/section/section.component';
+import { FooterComponent } from './to-do-list/footer/footer.component'; // 加入 To-Do List Component
 
 
 @NgModule({
@@ -26,6 +29,9 @@ import { VoterParentComponent } from './voter/voter-parent/voter-parent.componen
     VoterComponent,
     VoterChildComponent,
     VoterParentComponent,
+    HeaderComponent,
+    SectionComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
