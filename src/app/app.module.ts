@@ -15,7 +15,8 @@ import { VoterChildComponent } from './voter/voter-child/voter-child.component';
 import { VoterParentComponent } from './voter/voter-parent/voter-parent.component';
 import { HeaderComponent } from './to-do-list/header/header.component';
 import { SectionComponent } from './to-do-list/section/section.component';
-import { FooterComponent } from './to-do-list/footer/footer.component'; // 加入 To-Do List Component
+import { FooterComponent } from './to-do-list/footer/footer.component';
+import { TodoInfoModalComponent } from './to-do-list/section/todo-info-modal/todo-info-modal.component'; // 加入 To-Do List Component
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { FooterComponent } from './to-do-list/footer/footer.component'; // 加�
     HeaderComponent,
     SectionComponent,
     FooterComponent,
+    TodoInfoModalComponent,
   ],
   imports: [
     BrowserModule,

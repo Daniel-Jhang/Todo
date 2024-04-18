@@ -9,12 +9,13 @@ import { ITodo } from '../@models/to-do-list.model';
   styleUrls: ['./section.component.scss'],
 })
 export class SectionComponent implements OnInit {
-  
+  nowSelectTodo!: ITodo;
+
   get toggleAllBtn() {
     return this.todoService.toggleAllBtn;
   }
 
-  get nowTodoList(): ITodo[] {
+  get nowTodoList() {
     return this.todoService.nowTodoList;
   }
 

@@ -46,25 +46,37 @@ export class TodoService {
 
   // 新增資料
   create(input: HTMLInputElement): Observable<boolean> {
+    const seqNo = new Date().getTime();
     const newTodoContext: ITodo = {
       TodoId: '',
       Status: false,
       Context: input.value,
       Editing: false,
+      CanEdit: false,
+      SeqNo: seqNo,
+      CreateTime: new Date(),
     };
+    // 為提升使用者體驗(新增的待辦事項"立即"顯示在清單上)，避免網路或其他因素造成的體感延遲
+    // 這邊先將新增的待辦事項push到畫面上
+    this.todoDataList.push(newTodoContext);
+
+    // 此時才將request打到後端去新增TodoList
     return this.todoApiService.createData(newTodoContext).pipe(
       map((response) => {
         if (response.isSuccess) {
-          this.todoDataList.push({
-            TodoId: response.data.todoId,
-            Status: response.data.status,
-            Context: response.data.context,
-            Editing: response.data.editing,
+          // 若後端新增成功，則根據SeqNo將CanEdit屬性改成true
+          this.todoDataList.forEach((data) => {
+            if (data.SeqNo === seqNo) {
+              data.TodoId = response.data.todoId;
+              data.CanEdit = true;
+            }
           });
           console.log(this.todoDataList);
           return true;
         } else {
-          console.error(`錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`);
+          console.error(
+            `錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`
+          );
           return false;
         }
       })
@@ -76,19 +88,18 @@ export class TodoService {
     return this.todoApiService.getData().pipe(
       map((response) => {
         if (response.isSuccess) {
-          this.todoDataList = response.data.map((item: any) => {
-            return {
-              TodoId: item.todoId,
-              Status: item.status,
-              Context: item.context,
-              //Editing: item.editing,
-            };
+          this.todoDataList = response.data;
+          this.todoDataList.forEach((item) => {
+            item.CanEdit = true;
+            item.Editing = false;
           });
           console.log(this.todoDataList);
           this.checkToggleAllBtn();
           return true;
         } else {
-          console.error(`錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`);
+          console.error(
+            `錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`
+          );
           return false;
         }
       })
@@ -103,7 +114,9 @@ export class TodoService {
           item.Editing = false;
           return true;
         } else {
-          console.error(`錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`);
+          console.error(
+            `錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`
+          );
           return false;
         }
       })
@@ -131,7 +144,9 @@ export class TodoService {
           this.checkToggleAllBtn();
           return true;
         } else {
-          console.error(`錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`);
+          console.error(
+            `錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`
+          );
           return false;
         }
       })
@@ -143,11 +158,12 @@ export class TodoService {
     return this.todoApiService.deleteData(item).pipe(
       map((response) => {
         if (response.isSuccess) {
-          // TODO: 改用後端return回來的data渲染
           this.todoDataList = this.todoDataList.filter((data) => data !== item);
           return true;
         } else {
-          console.error(`錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`);
+          console.error(
+            `錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`
+          );
           return false;
         }
       })
@@ -166,8 +182,10 @@ export class TodoService {
           // TODO: 改用後端return回來的data渲染
           this.todoDataList = this.todoActive;
           return true;
-        }else{
-          console.error(`錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`);
+        } else {
+          console.error(
+            `錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`
+          );
           return false;
         }
       })

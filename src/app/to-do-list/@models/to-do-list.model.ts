@@ -7,6 +7,9 @@ export interface ITodo {
   Status: boolean;
   Context: string;
   Editing: boolean;
+  CanEdit: boolean;
+  SeqNo: number;
+  CreateTime: Date;
 }
 
 export class Todo implements ITodo {
@@ -14,12 +17,18 @@ export class Todo implements ITodo {
   Status: boolean;
   Context: string;
   Editing: boolean;
+  CanEdit: boolean;
+  SeqNo: number;
+  CreateTime: Date;
 
-  constructor() {
+  constructor(_context: string, _status: boolean = false, _seqno: number) {
     this.TodoId = '';
-    this.Status = false;
-    this.Context = '';
+    this.Status = _status;
+    this.Context = _context;
     this.Editing = false;
+    this.CanEdit = false;
+    this.SeqNo = _seqno;
+    this.CreateTime = new Date();
   }
 
   toggle() {

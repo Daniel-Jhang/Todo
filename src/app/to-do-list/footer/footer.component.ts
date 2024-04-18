@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  
+  // 變數宣告
   TodoStatusType = TodoStatusType;
 
   // 取得已未完成的 todo list
@@ -17,13 +17,13 @@ export class FooterComponent implements OnInit {
     return this.todoService.todoActive;
   }
 
-  get nowTodoStatusType() {
-    return this.todoService.nowTodoStatusType;
-  }
-
   // 取得已完成的 todo list
   get todoCompleted(): ITodo[] {
     return this.todoService.todoCompleted;
+  }
+
+  get nowTodoStatusType() {
+    return this.todoService.nowTodoStatusType;
   }
 
   constructor(

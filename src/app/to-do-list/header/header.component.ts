@@ -10,9 +10,6 @@ import { TodoService } from '../services/to-do-list.service';
 export class HeaderComponent implements OnInit {
   @Input() title!: string;
 
-  //待處理
-  attributeBinding = 'attributeBindingTest';
-
   constructor(
     private todoService: TodoService,
     private toastr: ToastrService
