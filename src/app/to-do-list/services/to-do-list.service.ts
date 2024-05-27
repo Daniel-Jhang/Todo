@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TodoStatusType, ITodo } from '../@models/to-do-list.model';
 import { TodoApiService } from './to-do-list-request.service';
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class TodoService {
   nowTodoStatusType = TodoStatusType.All;
   todoDataList: ITodo[] = [];
 
-  get nowTodoList(): ITodo[] {
+  get nowTodoList() {
     let list: ITodo[] = [];
 
     switch (this.nowTodoStatusType) {
@@ -45,12 +45,12 @@ export class TodoService {
   }
 
   // 新增資料
-  create(input: HTMLInputElement): Observable<boolean> {
-    const seqNo = new Date().getTime();
+  create(value: string): Observable<boolean> {
+    const seqNo = new Date().getSeconds();
     const newTodoContext: ITodo = {
       TodoId: '',
       Status: false,
-      Context: input.value,
+      Context: value,
       Editing: false,
       CanEdit: false,
       SeqNo: seqNo,
@@ -62,24 +62,25 @@ export class TodoService {
 
     // 此時才將request打到後端去新增TodoList
     return this.todoApiService.createData(newTodoContext).pipe(
-      map((response) => {
+      tap((response) => {
         if (response.isSuccess) {
           // 若後端新增成功，則根據SeqNo將CanEdit屬性改成true
-          this.todoDataList.forEach((data) => {
-            if (data.SeqNo === seqNo) {
-              data.TodoId = response.data.todoId;
-              data.CanEdit = true;
-            }
-          });
+          const todoId = response.data.todoId;
+          const updatedTodo = this.todoDataList.find(
+            (todo) => todo.SeqNo === newTodoContext.SeqNo
+          );
+          if (updatedTodo) {
+            updatedTodo.TodoId = todoId;
+            updatedTodo.CanEdit = true;
+          }
           console.log(this.todoDataList);
-          return true;
         } else {
           console.error(
             `錯誤訊息: ${response.errorMessage}, 細節描述:${response.errorDetail}`
           );
-          return false;
         }
-      })
+      }),
+      map((response) => response.isSuccess) // 返回操作是否成功的布林值
     );
   }
 

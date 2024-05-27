@@ -8,7 +8,7 @@ import { ITodo } from '../../@models/to-do-list.model';
 })
 export class TodoInfoModalComponent implements OnInit {
   todoInfoModal: any;
-  @Input() todo!:ITodo
+  @Input() todo!: ITodo;
 
   constructor() {}
 

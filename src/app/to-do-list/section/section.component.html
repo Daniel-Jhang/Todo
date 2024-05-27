@@ -1,40 +1,27 @@
-<input id="toggle-all"
-       class="toggle-all"
-       type="checkbox"
-       [checked]="toggleAllBtn"
-       (click)="toggleAll()" />
+<input id="toggle-all" type="checkbox" [checked]="toggleAllBtn" (click)="toggleAll()" class="toggle-all" />
 
 <label for="toggle-all">Mark all as complete</label>
 
 <ul class="todo-list">
   <!-- 改用*ngFor寫<li>的內容 -->
-  <li *ngFor="let item of nowTodoList; let i = index" [class]="{
-      completed: item.Status,
-      editing: item.Editing,
-      smallText: item.Status
-    }">
+  <li *ngFor="let item of nowTodoList; let i = index"
+    [class]="{completed: item.Status, editing: item.Editing, smallText: item.Status}">
 
     <div class="view">
-      <input class="toggle"
-             type="checkbox"
-             [checked]="item.Status"
-             (click)="clickCheck(item)" />
+      <input (click)="clickCheck(item)" class="toggle" type="checkbox" [checked]="item.Status" *ngIf="item.CanEdit">
 
       <!-- 利用ngFor提供的index(i)參數刪除陣列裡的指定物件 -->
-      <label (dblclick)="edit(item)">{{ item.Context }}</label>
+      <label (dblclick)="edit(item)">{{item.Context}}</label>
 
-      <button class="destroy2" *ngIf="item.CanEdit" (click)="modal.show(); nowSelectTodo = item" >i</button>
+      <button (click)="modal.show();nowSelectTodo=item" *ngIf="item.CanEdit" class="destroy2">i</button>
 
-      <button class="destroy" (click)="delete(item)"></button>
+      <button (click)="delete(item)" *ngIf="item.CanEdit" class="destroy"> </button>
 
     </div>
 
     <!-- 使用ngIf控制元素是否出現在Html上 -->
-    <input class="edit"
-           *ngIf="item.Editing" #itemInput [(ngModel)]="item.Context"
-           (keyup.enter)="update(item)"
-           (blur)="update(item)"
-           (mouseenter)="itemInput.focus()" />
+    <input *ngIf="item.Editing" #itemInput [(ngModel)]="item.Context" (keyup.enter)="update(item)" (blur)="update(item)"
+      (mouseenter)="itemInput.focus()" class="edit" />
   </li>
 </ul>
 

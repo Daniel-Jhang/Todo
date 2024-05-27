@@ -8,7 +8,10 @@ import { TodoService } from '../services/to-do-list.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  @Input() title!: string;
+  @Input() 
+  title!: string;
+  
+  todoInputModel = '';
 
   constructor(
     private todoService: TodoService,
@@ -18,8 +21,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {}
 
   // 新增資料
-  add(input: HTMLInputElement) {
-    this.todoService.create(input).subscribe((success: boolean) => {
+  add() {
+    this.todoService.create(this.todoInputModel).subscribe((success: boolean) => {
       if (success) {
         this.toastr.success('新增資料成功', 'Success', {
           timeOut: 2000,
@@ -30,6 +33,6 @@ export class HeaderComponent implements OnInit {
         });
       }
     });
-    input.value = '';
+    this.todoInputModel = '';
   }
 }
