@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TodoStatusType, ITodo } from '../@models/to-do-list.model';
 import { TodoApiService } from './to-do-list-request.service';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -40,9 +40,7 @@ export class TodoService {
   }
 
   // 建構式
-  constructor(private todoApiService: TodoApiService) {
-    this.getData();
-  }
+  constructor(private todoApiService: TodoApiService) {}
 
   // 新增資料
   create(value: string): Observable<boolean> {
@@ -88,6 +86,7 @@ export class TodoService {
   getData(): Observable<boolean> {
     return this.todoApiService.getData().pipe(
       map((response) => {
+        console.log('API Response:', response);
         if (response.isSuccess) {
           this.todoDataList = response.data;
           this.todoDataList.forEach((item) => {
@@ -103,6 +102,10 @@ export class TodoService {
           );
           return false;
         }
+      }),
+      catchError((error) => {
+        console.error('API Error:', error);
+        return of(false);
       })
     );
   }

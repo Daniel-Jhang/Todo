@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ITodo } from '../@models/to-do-list.model';
 import { IApiResultModel } from '../@models/apiResultData.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,8 +18,8 @@ export class TodoApiService {
     return this.http.post<IApiResultModel>(this.apiUrl, value);
   }
   // 取得資料
-  getData() {
-    return this.http.get<IApiResultModel>(this.apiUrl);
+  getData(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
   }
   // 更新資料
   updateDate(value: ITodo) {
